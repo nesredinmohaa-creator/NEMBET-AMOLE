@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Nembet Amole | Ethiopia's #1 Betting Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            appDark: '#0e100f',
+            cardBg: '#1e211f',
+            brandOrange: '#ff6200',
+            brandGreen: '#00a859',
+            brandYellow: '#f59e0b'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #0e100f; font-family: sans-serif; }
+    .marquee-text { animation: marquee 20s linear infinite; white-space: nowrap; }
+    @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+<body class="text-white min-h-screen flex flex-col select-none overflow-x-hidden">
+
+  <!-- ADMIN TOGGLE BAR -->
+  <div class="bg-brandYellow text-black text-[10px] font-black py-1 px-4 flex justify-between items-center z-50">
+    <span>ADMIN CONTROL:</span>
+    <div class="flex gap-2">
+      <button onclick="switchRole('player')" id="btn-player" class="bg-black text-white px-2 py-0.5 rounded uppercase">User View</button>
+      <button onclick="switchRole('admin')" id="btn-admin" class="bg-black/20 text-black px-2 py-0.5 rounded uppercase">Admin (<span id="admin-count">0</span>)</button>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="bg-[#181c19] border-b border-white/5 p-4 sticky top-0 z-40 flex justify-between items-center">
+    <h1 class="text-xl font-black tracking-tighter text-brandOrange">NEMBET<span class="text-white">AMOLE</span></h1>
+    <div class="flex items-center gap-2">
+      <div onclick="openDeposit()" class="bg-[#1b261f] border border-[#2d3e33] px-3 py-1.5 rounded-full flex items-center gap-2 cursor-pointer">
+        <span class="text-brandGreen text-xs"><i class="fa-solid fa-coins"></i></span>
+        <span class="text-xs font-black"><span id="balance">0.44</span> <span class="text-brandGreen">ETB</span></span>
+      </div>
+      <button onclick="toggleMenu()" class="text-lg px-2"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </header>
+
+  <!-- MAIN VIEW -->
+  <main id="main-view" class="flex-1 p-4 max-w-lg mx-auto w-full flex flex-col gap-6">
+    <!-- LANDING CARD -->
+    <div class="bg-gradient-to-br from-brandOrange/20 to-transparent p-6 rounded-[2rem] border border-brandOrange/20 text-center flex flex-col gap-4">
+      <h2 class="text-2xl font-black">Premium Betting in Ethiopia</h2>
+      <p class="text-xs text-gray-400">Play Aviator, Chicken Road, and Penalty Shootout with instant Telebirr deposits.</p>
+      <div class="flex gap-2 justify-center">
+        <button onclick="openRegister()" class="bg-brandOrange text-white font-black px-6 py-3 rounded-xl text-xs">REGISTER NOW</button>
+      </div>
+    </div>
+
+    <!-- TICKER -->
+    <div class="bg-cardBg py-2 rounded-xl overflow-hidden">
+      <div class="marquee-text text-[10px] font-bold text-gray-500 uppercase">
+        ⚠️ Responsible Gaming: Set your limits. • Direct Telebirr deposits to shamil (0935140409) are verified 24/7. • Join the winners today!
+      </div>
+    </div>
+
+    <!-- GAMES LOBBY -->
+    <div class="grid grid-cols-2 gap-3">
+      <div onclick="alert('Aviator Loading...')" class="bg-cardBg p-4 rounded-2xl border border-white/5 h-32 flex flex-col justify-between">
+        <span class="text-red-500 text-xs font-black italic">AVIATOR</span>
+        <span class="text-[10px] text-gray-500">Live Crash Game</span>
+      </div>
+      <div onclick="alert('Chicken Road Loading...')" class="bg-cardBg p-4 rounded-2xl border border-white/5 h-32 flex flex-col justify-between">
+        <span class="text-brandYellow text-xs font-black italic">CHICKEN ROAD</span>
+        <span class="text-[10px] text-gray-500">New Stepping Game</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- SIDEBAR MENU -->
+  <div id="sidebar" class="fixed right-0 top-0 bottom-0 w-72 bg-[#161616] border-l border-white/10 z-[60] p-6 flex flex-col gap-6 translate-x-full transition-transform duration-300">
+    <div class="flex justify-between items-center">
+      <span class="text-[10px] text-gray-500 font-bold">MY ACCOUNT</span>
+      <button onclick="toggleMenu()" class="text-white">✕</button>
+    </div>
+    <div class="flex flex-col gap-2">
+      <p class="text-xs text-gray-400 font-bold">nesredinmonaa@gmail.com</p>
+      <p class="text-lg font-black text-brandOrange"><span id="side-balance">0.44</span> ETB</p>
+    </div>
+    <div class="flex flex-col gap-1">
+      <button onclick="openDeposit()" class="w-full text-left p-3 rounded-lg bg-cardBg text-xs font-bold flex justify-between">
+        Deposit <span class="text-red-500">!</span>
+      </button>
+      <button class="w-full text-left p-3 rounded-lg bg-cardBg text-xs font-bold">Bet History</button>
+      <button onclick="location.reload()" class="w-full text-left p-3 rounded-lg bg-red-900/20 text-red-500 text-xs font-bold">Logout</button>
+    </div>
+  </div>
+
+  <!-- DEPOSIT MODAL -->
+  <div id="dep-modal" class="fixed inset-0 bg-black/90 z-[70] hidden items-center justify-center p-4">
+    <div class="bg-white text-black rounded-3xl w-full max-w-md overflow-hidden flex flex-col">
+      <div class="bg-[#1e2320] text-white p-4 flex justify-between">
+        <span class="font-black">telebirr</span>
+        <button onclick="closeDeposit()">✕</button>
+      </div>
+      <div class="p-5 flex flex-col gap-4">
+        <div class="bg-brandGreen text-white p-3 rounded-xl text-[10px] font-bold">
+          Before creating a request, transfer funds using details below.
+        </div>
+        <div class="flex flex-col gap-2">
+          <div class="bg-gray-100 p-3 rounded-xl flex justify-between items-center">
+            <div><p class="text-[8px] text-gray-400 font-bold">TELEBIRR PHONE</p><p id="m-phone" class="font-black">0935140409</p></div>
+            <button onclick="copy('m-phone')" class="bg-brandOrange text-white text-[10px] px-3 py-1 rounded-lg">Copy</button>
+          </div>
+          <div class="bg-gray-100 p-3 rounded-xl flex justify-between items-center">
+            <div><p class="text-[8px] text-gray-400 font-bold">MERCHANT NAME</p><p id="m-name" class="font-black">shamil</p></div>
+            <button onclick="copy('m-name')" class="bg-brandOrange text-white text-[10px] px-3 py-1 rounded-lg">Copy</button>
+          </div>
+        </div>
+        <input type="number" id="dep-amt" placeholder="Amount (ETB)" class="bg-gray-100 p-3 rounded-xl text-sm font-bold focus:outline-none">
+        <input type="text" id="dep-txn" placeholder="Transaction Number / Ref ID *" class="bg-yellow-50 border-2 border-brandYellow p-3 rounded-xl text-sm font-bold uppercase">
+        <button onclick="submitDep()" class="bg-brandGreen text-white font-black py-4 rounded-2xl text-xs">CONFIRM DEPOSIT</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN PANEL -->
+  <div id="admin-view" class="hidden flex-1 p-4 max-w-lg mx-auto w-full flex flex-col gap-4">
+    <h2 class="text-sm font-black border-b border-white/10 pb-2">PENDING DEPOSIT APPROVALS</h2>
+    <div id="admin-list" class="flex flex-col gap-2">
+      <p class="text-xs text-gray-500 text-center py-10">No pending slips.</p>
+    </div>
+  </div>
+
+  <script>
+    let users = JSON.parse(localStorage.getItem('nembet_users')) || {'+251935140409': {balance: 0.44}};
+    let txns = JSON.parse(localStorage.getItem('nembet_txns')) || [];
+    let curUser = '+251935140409';
+
+    function sync() {
+      document.getElementById('balance').innerText = users[curUser].balance.toFixed(2);
+      document.getElementById('side-balance').innerText = users[curUser].balance.toFixed(2);
+      localStorage.setItem('nembet_users', JSON.stringify(users));
+      localStorage.setItem('nembet_txns', JSON.stringify(txns));
+      renderAdmin();
+    }
+
+    function toggleMenu() { document.getElementById('sidebar').classList.toggle('translate-x-full'); }
+    function openDeposit() { document.getElementById('dep-modal').classList.replace('hidden', 'flex'); toggleMenu(); }
+    function closeDeposit() { document.getElementById('dep-modal').classList.replace('flex', 'hidden'); }
+
+    function copy(id) {
+      navigator.clipboard.writeText(document.getElementById(id).innerText);
+      alert('Copied!');
+    }
+
+    function submitDep() {
+      let amt = parseFloat(document.getElementById('dep-amt').value);
+      let txn = document.getElementById('dep-txn').value.trim();
+      if(!amt || !txn) return alert('Fill all fields!');
+      txns.unshift({id: Date.now(), user: curUser, amt, txn: txn.toUpperCase(), status: 'pending'});
+      alert('Slip Submitted! Shamil will verify it.');
+      closeDeposit(); sync();
+    }
+
+    function switchRole(role) {
+      if(role === 'admin') {
+        document.getElementById('main-view').classList.add('hidden');
+        document.getElementById('admin-view').classList.remove('hidden');
+      } else {
+        document.getElementById('admin-view').classList.add('hidden');
+        document.getElementById('main-view').classList.remove('hidden');
+      }
+    }
+
+    function renderAdmin() {
+      let p = txns.filter(t => t.status === 'pending');
+      document.getElementById('admin-count').innerText = p.length;
+      let html = p.map(t => `
+        <div class="bg-cardBg p-4 rounded-xl flex justify-between items-center border border-white/5">
+          <div class="text-xs">
+            <p class="font-black text-brandOrange">${t.amt} ETB</p>
+            <p class="text-[10px] text-gray-500">ID: ${t.txn}</p>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="approve(${t.id})" class="bg-brandGreen text-[10px] font-black px-3 py-1 rounded">APPROVE</button>
+          </div>
+        </div>
+      `).join('') || '<p class="text-xs text-gray-500 text-center py-10">No pending slips.</p>';
+      document.getElementById('admin-list').innerHTML = html;
+    }
+
+    function approve(id) {
+      let t = txns.find(x => x.id === id);
+      t.status = 'approved';
+      users[t.user].balance += t.amt;
+      sync();
+    }
+
+    sync();
+  </script>
+</body>
+</html>
