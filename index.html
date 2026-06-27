@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nembet Amole | Premium Betting & Gaming Platform</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            appDark: '#0a0e0c',
+            cardBg: '#141b17',
+            brandOrange: '#ff6200',
+            brandGreen: '#00a859',
+            brandYellow: '#f59e0b',
+            brandRed: '#ef4444',
+            brandPurple: '#8b5cf6',
+            brandBlue: '#3b82f6'
+          },
+          fontSize: {
+            'xxs': '0.625rem'
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: linear-gradient(135deg, #0a0e0c 0%, #141b17 100%);
+      color: white;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .marquee { animation: marquee 25s linear infinite; white-space: nowrap; }
+    @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+    
+    /* Premium glass effect */
+    .glass-effect {
+      background: rgba(20, 27, 23, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Smooth transitions */
+    .transition-all { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    
+    /* Game card hover */
+    .game-card { cursor: pointer; }
+    .game-card:hover { transform: translateY(-8px); }
+    
+    /* Button animations */
+    .btn-primary { 
+      background: linear-gradient(135deg, #ff6200, #ff8c42);
+      box-shadow: 0 8px 25px rgba(255, 98, 0, 0.3);
+    }
+    .btn-primary:hover { 
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(255, 98, 0, 0.5);
+    }
+    
+    .sidebar-active { transform: translateX(0) !important; }
+  </style>
+</head>
+<body class="text-white overflow-x-hidden">
+
+  <!-- TOP ADMIN CONTROL BAR -->
+  <div class="bg-gradient-to-r from-brandYellow to-yellow-500 text-black text-xs font-black py-2.5 px-6 flex justify-between items-center z-50 sticky top-0">
+    <span>⚙️ ADMIN CONTROL:</span>
+    <div class="flex gap-3">
+      <button onclick="switchRole('player')" id="btn-player" class="bg-black text-white px-4 py-1.5 rounded-lg font-bold text-xs hover:bg-gray-800 transition">Player View</button>
+      <button onclick="switchRole('admin')" id="btn-admin" class="bg-black/30 text-black px-4 py-1.5 rounded-lg font-bold text-xs hover:bg-black/50 transition">Admin (<span id="admin-count">0</span>)</button>
+    </div>
+  </div>
+
+  <!-- HEADER/NAVBAR -->
+  <header class="glass-effect border-b border-white/10 sticky top-10 z-40">
+    <div class="max-w-full mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-4">
+        <h1 class="text-3xl font-black tracking-tighter bg-gradient-to-r from-brandOrange to-yellow-400 bg-clip-text text-transparent">
+          NEMBET
+        </h1>
+        <h1 class="text-3xl font-black tracking-tighter text-white">AMOLE</h1>
+      </div>
+      
+      <div class="flex items-center gap-4">
+        <!-- Balance Display -->
+        <div onclick="openDeposit()" class="glass-effect px-5 py-2.5 rounded-full flex items-center gap-3 cursor-pointer hover:border-brandGreen transition">
+          <span class="text-xl text-brandGreen"><i class="fa-solid fa-wallet"></i></span>
+          <div class="text-right">
+            <p class="text-xs text-gray-400">Balance</p>
+            <p class="font-black text-lg"><span id="balance">0.44</span><span class="text-brandGreen text-sm ml-1">ETB</span></p>
+          </div>
+        </div>
+        
+        <!-- Desktop Menu -->
+        <div class="hidden lg:flex items-center gap-2">
+          <button onclick="navigateSection('games')" class="px-5 py-2.5 rounded-lg text-xs font-bold hover:bg-white/5 transition">Games</button>
+          <button onclick="navigateSection('history')" class="px-5 py-2.5 rounded-lg text-xs font-bold hover:bg-white/5 transition">History</button>
+          <button onclick="toggleMenu()" class="btn-primary text-white px-6 py-2.5 rounded-lg text-xs font-bold">Menu</button>
+        </div>
+        
+        <!-- Mobile Menu Toggle -->
+        <button onclick="toggleMenu()" class="lg:hidden text-2xl p-2"><i class="fa-solid fa-bars"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="min-h-screen p-6">
+    <div class="max-w-7xl mx-auto">
+      
+      <!-- LANDING SECTION -->
+      <section id="section-landing" class="mb-12">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <!-- Hero Content -->
+          <div class="flex flex-col justify-center gap-6">
+            <div class="space-y-4">
+              <span class="inline-block bg-brandOrange/20 text-brandOrange text-xs font-black px-4 py-2 rounded-full">🚀 PREMIUM GAMING</span>
+              <h2 class="text-5xl lg:text-6xl font-black leading-tight">
+                Bet Smart,<br/>Win Big
+              </h2>
+              <p class="text-gray-400 text-lg">
+                Experience Ethiopia's most thrilling betting platform with instant Telebirr transfers, real-time gaming, and exclusive rewards.
+              </p>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-4">
+              <button onclick="openDeposit()" class="btn-primary text-white font-black px-8 py-4 rounded-xl text-base">Deposit Now</button>
+              <button onclick="navigateSection('games')" class="border-2 border-brandOrange/50 text-white font-black px-8 py-4 rounded-xl text-base hover:border-brandOrange transition">Play Games</button>
+            </div>
+          </div>
+          
+          <!-- Hero Graphic -->
+          <div class="flex items-center justify-center">
+            <div class="glass-effect p-8 rounded-3xl w-full max-w-sm space-y-6">
+              <div class="grid grid-cols-3 gap-3 text-center">
+                <div class="bg-black/40 p-4 rounded-xl">
+                  <p class="text-2xl">🎮</p>
+                  <p class="text-xs text-gray-400 mt-2">8+ Games</p>
+                </div>
+                <div class="bg-black/40 p-4 rounded-xl">
+                  <p class="text-2xl">⚡</p>
+                  <p class="text-xs text-gray-400 mt-2">Instant Pay</p>
+                </div>
+                <div class="bg-black/40 p-4 rounded-xl">
+                  <p class="text-2xl">🏆</p>
+                  <p class="text-xs text-gray-400 mt-2">Live Odds</p>
+                </div>
+              </div>
+              <div class="bg-gradient-to-br from-brandOrange/20 to-brandGreen/20 p-6 rounded-2xl text-center space-y-2">
+                <p class="text-sm text-gray-300">Daily Bonus Pool</p>
+                <p class="text-4xl font-black text-brandOrange">25,000 ETB</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ticker -->
+        <div class="glass-effect p-4 rounded-2xl overflow-hidden mb-8">
+          <div class="marquee text-xs font-bold text-brandYellow uppercase tracking-widest flex items-center gap-8">
+            <span>⚠️ Responsible Gaming: Set your limits • Direct Telebirr transfers verified 24/7 • Join 50K+ winners today</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- GAMES SECTION -->
+      <section id="section-games" class="mb-12">
+        <div class="mb-8">
+          <h2 class="text-4xl font-black mb-2">Choose Your Game</h2>
+          <p class="text-gray-400">8 premium betting games with live odds and instant payouts</p>
+        </div>
+
+        <!-- Game Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          <!-- Game 1: Aviator -->
+          <div onclick="startGame('aviator')" class="game-card glass-effect p-6 rounded-2xl cursor-pointer group hover:border-brandOrange transition-all">
+            <div class="text-5xl mb-4 group-hover:scale-110 transition-transform">✈️</div>
+            <h3 class="font-black text-xl mb-1">Aviator</h3>
+            <p class="text-xs text-gray-400 mb-4">Crash game with max 999.99x multiplier</p>
+            <div class="flex justify-between items-center">
+              <span class="text-brandOrange font-black">Max: 100K ETB</span>
+              <span class="text-green-400">→</span>
+            </div>
+          </div>
+
+          <!-- Game 2: Chicken Run -->
+          <div onclick="startGame('chicken')" class="game-card glass-effect p-6 rounded-2xl cursor-pointer group hover:border-brandGreen transition-all">
+            <div class="text-5xl mb-4 group-hover:scale-110 transition-transform">🐓</div>
+            <h3 class="font-black text-xl mb-1">Chicken Run</h3>
+            <p class="text-xs text-gray-400 mb-4">Step climbing game with instant rewards</p>
+            <div class="flex justify-between items-center">
+              <span class="text-brandGreen font-black">Max: 50K ETB</span>
+              <span class="text-green-400">→</span>
+            </div>
+          </div>
+
+          <!-- Game 3: Penalty Shootout -->
+          <div onclick="startGame('penalty')" class="game-card glass-effect p-6 rounded-2xl cursor-pointer group hover:border-brandBlue transition-all">
+            <div class="text-5xl mb-4 group-hover:scale-110 transition-transform">⚽</div>
+            <h3 class="font-black text-xl mb-1">Penalty Shot</h3>
+            <p class="text-xs text-gray-400 mb-4">Skill-based soccer betting game</p>
+            <div class="flex justify-between items-center">
+              <span class="text-brandBlue font-black">Max: 25K ETB</span>
+              <span class="text-green-400">→</span>
+            </div>
+          </div>
+
+          <!-- Game 4: Roulette -->
+          <div onclick="startGame('roulette')" class="game-card glass-effect p-6 rounded-2xl cursor-pointer group hover:border-brandPurple transition-all">
+            <div class="text-5xl mb-4 group-hover:scale-110 transition-transform">🎰</div>
+            <h3 class="font-black text-xl mb-1">Tiny Roulette</h3>
+            <p class="text-xs text-gray-400 mb-4">Classic roulette with live spin results</p>
+            <div class="flex justify-between items-center">
+              <span class="text-brandPurple font-black">Max: 75K ETB</span>
+              <span class="text-green-400">→</span>
+            </div>
+          </div>
+
+          <!-- Game 5: Dice Roll -->
+          <div onclick="startGame('dice')" class="game-card glass-effect p-6 rounded-2xl cursor-pointer group hover:border-red-500 transition-all">
+            <div class="text-5xl mb-4 group-hover:scale-110 transition-transform">🎲</div>
+            <h3 class="font-black text-xl mb-1">Dice Roll</h3>
+            <p class="text-xs text-gray-400 mb-4">Double or nothing - guess the dice</p>
+            <div class="flex justify-between items-center">
+              <span class="text-red-500 font-black">Max: 30K ETB</span>
+              <span class="text-green-400">→</span>
+            </div>
+          </div>
+
+          <!-- Game 6: Hi/Lo Cards -->
+          <div onclick="startGame('cards')" class="game-card glass-effect p-6 rounded-2xl cursor-pointer group hover:border-yellow-500 transition-all">
+            <div class="text-5xl mb-4 group-hover:scale-110 transition-transform">🂡</div>
+            <h3 class="font-black text-xl mb-1">Hi/Lo Cards</h3>
+            <p class="text-xs text-gray-400 mb-4">Predict next card higher or lower</p>
+            <div class="flex justify-between items-center">
+              <span class="text-yellow-500 font-black">Max: 40K ETB</span>
+              <span class="text-green-400">→</span>
+            </div>
+          </div>
+
+          <!-- Game 7: Rock Paper Scissors -->
+          <div onclick="startGame('rps')" class="game-card glass-effect p-6 rounded-2xl cursor-pointer group hover:border-cyan-500 transition-all">
+            <div class="text-5xl mb-4 group-hover:scale-110 transition-transform">✋</div>
+            <h3 class="font-black text-xl mb-1">Rock Paper</h3>
+            <p class="text-xs text-gray-400 mb-4">Beat the AI in classic RPS</p>
+            <div class="flex justify-between items-center">
+              <span class="text-cyan-500 font-black">Max: 35K ETB</span>
+              <span class="text-green-400">→</span>
+            </div>
+          </div>
+
+          <!-- Game 8: Slots -->
+          <div onclick="startGame('slots')" class="game-card glass-effect p-6 rounded-2xl cursor-pointer group hover:border-pink-500 transition-all">
+            <div class="text-5xl mb-4 group-hover:scale-110 transition-transform">🎯</div>
+            <h3 class="font-black text-xl mb-1">Lucky Slots</h3>
+            <p class="text-xs text-gray-400 mb-4">3-reel slot machine with jackpots</p>
+            <div class="flex justify-between items-center">
+              <span class="text-pink-500 font-black">Max: 150K ETB</span>
+              <span class="text-green-400">→</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- HISTORY SECTION -->
+      <section id="section-history" class="mb-12 hidden">
+        <h2 class="text-4xl font-black mb-8">Bet History</h2>
+        <div class="glass-effect p-8 rounded-2xl">
+          <div id="history-list" class="space-y-3 max-h-96 overflow-y-auto no-scrollbar">
+            <p class="text-gray-400 text-center py-8">No bets yet. Start playing to see history!</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- SIDEBAR MENU -->
+  <div id="sidebar" class="fixed right-0 top-0 bottom-0 w-80 glass-effect border-l border-white/10 z-50 p-8 flex flex-col gap-6 translate-x-full transition-all duration-300">
+    <div class="flex justify-between items-center border-b border-white/10 pb-4">
+      <h3 class="text-xl font-black">Menu</h3>
+      <button onclick="toggleMenu()" class="text-2xl"><i class="fa-solid fa-times"></i></button>
+    </div>
+
+    <div class="space-y-2">
+      <p class="text-xs text-gray-500 font-black">ACCOUNT</p>
+      <p id="user-email" class="text-xs text-gray-300">user@nembet.com</p>
+      <p class="text-2xl font-black text-brandOrange"><span id="menu-balance">0.44</span> ETB</p>
+    </div>
+
+    <div class="space-y-2 flex-1">
+      <p class="text-xs text-gray-500 font-black">QUICK ACTIONS</p>
+      <button onclick="openDeposit(); toggleMenu()" class="w-full bg-gradient-to-r from-brandOrange to-orange-500 text-white font-black p-3.5 rounded-lg text-sm hover:shadow-lg transition">💰 Deposit Funds</button>
+      <button onclick="openWithdraw(); toggleMenu()" class="w-full bg-white/5 text-white font-bold p-3.5 rounded-lg text-sm hover:bg-white/10 transition">🏦 Withdraw</button>
+      <button onclick="navigateSection('history'); toggleMenu()" class="w-full bg-white/5 text-white font-bold p-3.5 rounded-lg text-sm hover:bg-white/10 transition">📊 Bet History</button>
+    </div>
+
+    <div class="space-y-2 pt-4 border-t border-white/10">
+      <p class="text-xs text-gray-500 font-black">INFO</p>
+      <button class="w-full text-left p-3 text-xs font-bold hover:bg-white/5 rounded transition">🆘 Support</button>
+      <button class="w-full text-left p-3 text-xs font-bold hover:bg-white/5 rounded transition">⚙️ Settings</button>
+      <button onclick="logout()" class="w-full text-left p-3 text-xs font-bold text-red-400 hover:bg-red-500/10 rounded transition">🚪 Logout</button>
+    </div>
+  </div>
+
+  <!-- DEPOSIT MODAL -->
+  <div id="deposit-modal" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-gradient-to-br from-cardBg to-appDark border border-white/10 rounded-3xl w-full max-w-md my-8 overflow-hidden shadow-2xl">
+      <div class="bg-gradient-to-r from-brandOrange to-orange-500 p-6 flex justify-between items-center">
+        <h2 class="text-2xl font-black">Deposit Funds</h2>
+        <button onclick="closeDeposit()" class="text-2xl"><i class="fa-solid fa-times"></i></button>
+      </div>
+
+      <div class="p-8 space-y-6">
+        <div class="bg-brandGreen/20 border border-brandGreen/50 p-4 rounded-xl">
+          <p class="text-xs text-brandGreen font-bold">Transfer funds using Telebirr within 10 minutes</p>
+        </div>
+
+        <div class="space-y-3">
+          <div class="glass-effect p-4 rounded-xl flex justify-between items-center">
+            <div>
+              <p class="text-xs text-gray-400">📱 Telebirr Phone</p>
+              <p id="dep-phone" class="font-black text-lg">0935140409</p>
+            </div>
+            <button onclick="copyText('dep-phone')" class="btn-primary text-white px-4 py-2 rounded-lg text-xs font-bold">Copy</button>
+          </div>
+
+          <div class="glass-effect p-4 rounded-xl flex justify-between items-center">
+            <div>
+              <p class="text-xs text-gray-400">👤 Merchant Name</p>
+              <p id="dep-name" class="font-black text-lg">shamil</p>
+            </div>
+            <button onclick="copyText('dep-name')" class="btn-primary text-white px-4 py-2 rounded-lg text-xs font-bold">Copy</button>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <div>
+            <label class="text-xs text-gray-400 font-bold block mb-2">Amount (ETB)</label>
+            <input type="number" id="dep-amount" placeholder="Minimum 25 ETB" class="w-full bg-black/40 text-white p-3.5 rounded-xl border border-white/10 font-bold text-lg">
+          </div>
+
+          <div class="grid grid-cols-5 gap-2">
+            <button onclick="setAmount(100)" class="bg-white/10 hover:bg-brandOrange/50 p-2 rounded-lg text-xs font-bold transition">100</button>
+            <button onclick="setAmount(500)" class="bg-white/10 hover:bg-brandOrange/50 p-2 rounded-lg text-xs font-bold transition">500</button>
+            <button onclick="setAmount(1000)" class="bg-white/10 hover:bg-brandOrange/50 p-2 rounded-lg text-xs font-bold transition">1K</button>
+            <button onclick="setAmount(5000)" class="bg-white/10 hover:bg-brandOrange/50 p-2 rounded-lg text-xs font-bold transition">5K</button>
+            <button onclick="setAmount(10000)" class="bg-white/10 hover:bg-brandOrange/50 p-2 rounded-lg text-xs font-bold transition">10K</button>
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-400 font-bold block mb-2">Your Phone Number</label>
+            <input type="tel" id="dep-user-phone" placeholder="09XXXXXXXX" class="w-full bg-black/40 text-white p-3.5 rounded-xl border border-white/10 font-bold">
+          </div>
+
+          <div>
+            <label class="text-xs text-red-500 font-black block mb-2">Transaction Number *</label>
+            <input type="text" id="dep-txn" placeholder="Enter Telebirr Transaction ID" class="w-full bg-brandYellow/20 text-white p-3.5 rounded-xl border-2 border-brandYellow font-bold uppercase">
+          </div>
+
+          <button onclick="submitDeposit()" class="w-full btn-primary text-white font-black p-4 rounded-xl text-lg hover:shadow-xl transition">Confirm Deposit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN PANEL -->
+  <div id="admin-view" class="hidden min-h-screen p-6">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-4xl font-black mb-8 text-brandYellow">Admin Dashboard</h2>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div class="glass-effect p-6 rounded-2xl border-2 border-brandYellow">
+          <p class="text-sm text-gray-400 mb-2">Pending Deposits</p>
+          <p class="text-4xl font-black text-brandYellow" id="admin-count-display">0</p>
+        </div>
+        <div class="glass-effect p-6 rounded-2xl border-2 border-brandGreen">
+          <p class="text-sm text-gray-400 mb-2">Total Revenue</p>
+          <p class="text-4xl font-black text-brandGreen" id="admin-revenue">0 ETB</p>
+        </div>
+      </div>
+
+      <div class="glass-effect p-6 rounded-2xl">
+        <h3 class="text-xl font-black mb-4">Pending Approvals</h3>
+        <div id="admin-list" class="space-y-3 max-h-96 overflow-y-auto no-scrollbar">
+          <p class="text-gray-400 text-center py-8">No pending deposits</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN VIEW -->
+  <div id="main-view"></div>
+
+  <script>
+    // ============ STATE MANAGEMENT ============
+    let users = JSON.parse(localStorage.getItem('nembet_users')) || {'+251935140409': {balance: 0.44}};
+    let txns = JSON.parse(localStorage.getItem('nembet_txns')) || [];
+    let curUser = '+251935140409';
+
+    function sync() {
+      document.getElementById('balance').innerText = users[curUser].balance.toFixed(2);
+      document.getElementById('menu-balance').innerText = users[curUser].balance.toFixed(2);
+      localStorage.setItem('nembet_users', JSON.stringify(users));
+      localStorage.setItem('nembet_txns', JSON.stringify(txns));
+      renderAdmin();
+      renderHistory();
+    }
+
+    // ============ UI CONTROLS ============
+    function toggleMenu() { 
+      document.getElementById('sidebar').classList.toggle('translate-x-full');
+    }
+
+    function openDeposit() { 
+      document.getElementById('deposit-modal').classList.remove('hidden');
+    }
+
+    function closeDeposit() { 
+      document.getElementById('deposit-modal').classList.add('hidden');
+    }
+
+    function openWithdraw() {
+      alert('Withdrawal feature coming soon!');
+    }
+
+    function navigateSection(id) {
+      document.querySelectorAll('[id^="section-"]').forEach(s => s.classList.add('hidden'));
+      document.getElementById(`section-${id}`).classList.remove('hidden');
+    }
+
+    function copyText(id) {
+      navigator.clipboard.writeText(document.getElementById(id).innerText);
+      alert('Copied!');
+    }
+
+    function setAmount(amt) {
+      document.getElementById('dep-amount').value = amt;
+    }
+
+    function submitDeposit() {
+      let amt = parseFloat(document.getElementById('dep-amount').value);
+      let phone = document.getElementById('dep-user-phone').value.trim();
+      let txn = document.getElementById('dep-txn').value.trim();
+      if(!amt || !phone || !txn) return alert('Fill all fields!');
+      txns.unshift({id: Date.now(), user: curUser, amt, txn: txn.toUpperCase(), status: 'pending'});
+      alert('Deposit submitted! Admin will verify.');
+      closeDeposit(); 
+      sync();
+    }
+
+    function switchRole(role) {
+      if(role === 'admin') {
+        document.getElementById('main-view').classList.add('hidden');
+        document.getElementById('admin-view').classList.remove('hidden');
+      } else {
+        document.getElementById('admin-view').classList.add('hidden');
+        document.getElementById('main-view').classList.remove('hidden');
+      }
+    }
+
+    function renderAdmin() {
+      let p = txns.filter(t => t.status === 'pending');
+      document.getElementById('admin-count').innerText = p.length;
+      document.getElementById('admin-count-display').innerText = p.length;
+      let html = p.map(t => `
+        <div class="glass-effect p-4 rounded-xl flex justify-between items-center">
+          <div class="text-sm">
+            <p class="font-black text-brandOrange">${t.amt} ETB</p>
+            <p class="text-xs text-gray-500">ID: ${t.txn}</p>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="approve(${t.id})" class="bg-brandGreen text-xs font-black px-4 py-2 rounded">APPROVE</button>
+            <button onclick="decline(${t.id})" class="bg-red-600/30 text-red-400 text-xs font-black px-4 py-2 rounded">DECLINE</button>
+          </div>
+        </div>
+      `).join('') || '<p class="text-xs text-gray-500 text-center py-10">No pending deposits.</p>';
+      document.getElementById('admin-list').innerHTML = html;
+    }
+
+    function approve(id) {
+      let t = txns.find(x => x.id === id);
+      t.status = 'approved';
+      users[t.user].balance += t.amt;
+      sync();
+      alert('Deposit approved!');
+    }
+
+    function decline(id) {
+      let t = txns.find(x => x.id === id);
+      t.status = 'declined';
+      sync();
+    }
+
+    function logout() {
+      alert('Logged out!');
+      location.reload();
+    }
+
+    function startGame(game) {
+      alert(`🎮 ${game.toUpperCase()} game coming soon! This is a demo version.`);
+    }
+
+    function renderHistory() {
+      let container = document.getElementById('history-list');
+      let userTxns = txns.filter(t => t.user === curUser);
+      if(userTxns.length === 0) {
+        container.innerHTML = '<p class="text-gray-400 text-center py-8">No bets yet!</p>';
+        return;
+      }
+      container.innerHTML = userTxns.map(t => `
+        <div class="glass-effect p-4 rounded-xl flex justify-between items-center">
+          <div class="text-sm">
+            <p class="font-bold">${t.status === 'approved' ? '✅' : '⏳'} ${t.amt} ETB</p>
+            <p class="text-xs text-gray-500">ID: ${t.txn}</p>
+          </div>
+          <span class="text-xs font-bold text-${t.status === 'approved' ? 'brandGreen' : 'brandYellow'}">${t.status}</span>
+        </div>
+      `).join('');
+    }
+
+    sync();
+    navigateSection('landing');
+  </script>
+</body>
+</html>
